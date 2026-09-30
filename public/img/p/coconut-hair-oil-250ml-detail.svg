@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(160 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(194 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <rect x="368" y="176" width="64" height="52" rx="10" fill="#464c51"/>
+      <rect x="356" y="228" width="88" height="34" rx="8" fill="hsl(160 48% 30%)"/>
+      <path d="M368 262 h64 v46 h-64z" fill="hsl(160 58% 80%)" opacity="0.7"/>
+      <path d="M310 308 q90-34 180 0 v246 q0 46-44 52 q-46 6 -92 0 q-44-6 -44-52z" fill="hsl(160 58% 80%)" opacity="0.85"/>
+      <path d="M330 330 q30-12 42-14 v230 q-24-4 -42-10z" fill="#ffffff" opacity="0.55"/>
+      <path d="M318 396 h164 v152 q0 34-34 40 q-48 6 -96 0 q-34-6 -34-40z" fill="hsl(160 52% 46%)" opacity="0.55"/>
+      <rect x="326" y="404" width="148" height="120" rx="8" fill="#ffffff" opacity="0.92"/>
+      <circle cx="400" cy="442" r="20" fill="hsl(160 48% 30%)"/>
+      <path d="M386 442 q14-18 28 0 q-14 18 -28 0z" fill="#ffffff"/>
+      <text x="400" y="492" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="20" font-weight="600" fill="hsl(160 48% 30%)">COCONUT</text>
+      <text x="400" y="514" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="16" fill="#5d646a">250 ml</text>
+    </g>
+  </g>
+</svg>

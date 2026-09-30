@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(95 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(129 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="">
+
+      <path d="M292 262 h216 l-10 30 H302z" fill="hsl(95 48% 30%)" opacity="0.5"/>
+      <path d="M286 292 h228 v268 q0 46-42 52 q-72 8 -144 0 q-42-6 -42-52z" fill="#ffffff"/>
+      <path d="M286 292 h228 v268 q0 46-42 52 q-72 8 -144 0 q-42-6 -42-52z" fill="hsl(95 58% 80%)" opacity="0.3"/>
+      <path d="M306 292 h40 v308 q-24-4 -40-10z" fill="#ffffff" opacity="0.75"/>
+      <path d="M286 340 h228 v40 H286z" fill="hsl(95 52% 46%)"/>
+      <text x="400" y="440" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="34" font-weight="700" fill="hsl(95 48% 30%)">UNGA</text>
+      <text x="400" y="474" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="22" fill="#5d646a">wa ngano</text>
+      <g stroke="hsl(95 48% 30%)" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85">
+        <path d="M400 500 v56"/>
+        <path d="M400 512 q-18-10 -22-26 q20 2 22 20"/>
+        <path d="M400 512 q18-10 22-26 q-20 2 -22 20"/>
+        <path d="M400 538 q-18-10 -22-26 q20 2 22 20"/>
+        <path d="M400 538 q18-10 22-26 q-20 2 -22 20"/>
+      </g>
+      <text x="400" y="590" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="24" font-weight="700" fill="#464c51">10 kg</text>
+    </g>
+  </g>
+</svg>

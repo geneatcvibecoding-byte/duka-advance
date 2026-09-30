@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(340 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(14 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <g transform="rotate(-4 400 430)">
+        <rect x="206" y="322" width="330" height="230" rx="6" fill="hsl(340 58% 80%)"/>
+        <rect x="206" y="322" width="330" height="230" rx="6" fill="none" stroke="hsl(340 48% 30%)" stroke-width="16"/>
+        <rect x="242" y="358" width="258" height="158" fill="none" stroke="hsl(340 52% 46%)" stroke-width="8"/>
+        <circle cx="371" cy="422" r="34" fill="hsl(340 52% 46%)"/>
+        <circle cx="371" cy="422" r="16" fill="hsl(340 58% 80%)"/>
+        <text x="371" y="500" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="21" font-weight="600" fill="hsl(340 48% 30%)">HERI NA BARAKA</text>
+      </g>
+      <g transform="rotate(6 400 430) translate(72 44)">
+        <rect x="206" y="322" width="330" height="230" rx="6" fill="#ffffff"/>
+        <rect x="206" y="322" width="330" height="230" rx="6" fill="none" stroke="hsl(340 52% 46%)" stroke-width="16"/>
+        <rect x="242" y="358" width="258" height="158" fill="none" stroke="hsl(340 48% 30%)" stroke-width="8"/>
+        <circle cx="371" cy="422" r="34" fill="hsl(340 48% 30%)"/>
+        <circle cx="371" cy="422" r="16" fill="#ffffff"/>
+        <text x="371" y="500" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="21" font-weight="600" fill="hsl(340 48% 30%)">UPENDO NI KILA KITU</text>
+      </g>
+    </g>
+  </g>
+</svg>

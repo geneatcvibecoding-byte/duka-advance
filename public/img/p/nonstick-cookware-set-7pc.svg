@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(25 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(59 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="">
+
+      <ellipse cx="400" cy="300" rx="150" ry="30" fill="#c3c9ce"/>
+      <path d="M250 300 h300 l-16 78 q-134 26 -268 0z" fill="#9aa2a9"/>
+      <circle cx="400" cy="292" r="20" fill="#464c51"/>
+      <path d="M232 400 h336 v128 q0 40-46 46 q-122 14 -244 0 q-46-6 -46-46z" fill="#2f3336"/>
+      <path d="M244 400 h312 v22 q-156 24 -312 0z" fill="#464c51"/>
+      <rect x="140" y="424" width="104" height="26" rx="13" fill="#464c51"/>
+      <rect x="556" y="424" width="104" height="26" rx="13" fill="#464c51"/>
+      <path d="M268 566 h264 v56 q0 26-32 30 q-100 10 -200 0 q-32-4 -32-30z" fill="hsl(25 48% 30%)"/>
+      <path d="M276 566 h248 v16 q-124 18 -248 0z" fill="hsl(25 52% 46%)"/>
+      <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="6" stroke-linecap="round">
+        <path d="M300 440 v58M330 446 v46"/>
+      </g>
+    </g>
+  </g>
+</svg>

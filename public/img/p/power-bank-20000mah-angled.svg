@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(265 42% 84%)"/>
+      <stop offset="100%" stop-color="hsl(299 38% 72%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="rotate(-9 400 400) translate(0 6)">
+
+      <rect x="278" y="228" width="244" height="386" rx="30" fill="#2f3336"/>
+      <rect x="294" y="244" width="212" height="354" rx="22" fill="#464c51"/>
+      <rect x="326" y="286" width="148" height="88" rx="10" fill="#2f3336"/>
+      <text x="400" y="346" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="44" font-weight="700" fill="hsl(265 52% 46%)">78%</text>
+      <g fill="hsl(265 52% 46%)">
+        <rect x="326" y="404" width="30" height="14" rx="7"/>
+        <rect x="366" y="404" width="30" height="14" rx="7"/>
+        <rect x="406" y="404" width="30" height="14" rx="7"/>
+      </g>
+      <rect x="446" y="404" width="30" height="14" rx="7" fill="#9aa2a9"/>
+      <rect x="330" y="460" width="60" height="26" rx="5" fill="#2f3336"/>
+      <rect x="338" y="468" width="44" height="10" rx="3" fill="#c3c9ce"/>
+      <rect x="412" y="460" width="60" height="26" rx="5" fill="#2f3336"/>
+      <rect x="420" y="468" width="44" height="10" rx="3" fill="#c3c9ce"/>
+      <rect x="352" y="530" width="96" height="10" rx="5" fill="#2f3336" opacity="0.6"/>
+    </g>
+  </g>
+</svg>

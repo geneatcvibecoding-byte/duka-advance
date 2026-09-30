@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(215 42% 84%)"/>
+      <stop offset="100%" stop-color="hsl(249 38% 72%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="rotate(-9 400 400) translate(0 6)">
+
+      <path d="M300 250h116l16 42H284z" fill="#c3c9ce"/>
+      <rect x="284" y="292" width="148" height="34" rx="8" fill="#464c51"/>
+      <rect x="300" y="326" width="116" height="292" rx="26" fill="#2f3336"/>
+      <rect x="316" y="352" width="84" height="176" rx="10" fill="hsl(215 48% 30%)" opacity="0.55"/>
+      <rect x="330" y="548" width="56" height="18" rx="9" fill="hsl(215 52% 46%)"/>
+      <circle cx="358" cy="270" r="30" fill="hsl(215 58% 80%)"/>
+      <circle cx="358" cy="270" r="16" fill="#ffffff" opacity="0.9"/>
+      <path d="M358 232 L214 96 L502 96 Z" fill="hsl(215 58% 80%)" opacity="0.4"/>
+      <rect x="452" y="404" width="102" height="214" rx="22" fill="#464c51"/>
+      <rect x="466" y="428" width="74" height="120" rx="8" fill="hsl(215 58% 80%)" opacity="0.75"/>
+    </g>
+  </g>
+</svg>

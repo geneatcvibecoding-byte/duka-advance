@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(95 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(129 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <rect x="366" y="176" width="68" height="46" rx="8" fill="hsl(95 48% 30%)"/>
+      <path d="M300 222 h200 v56 H300z" fill="hsl(95 52% 46%)" opacity="0.4"/>
+      <path d="M286 278 h228 v292 q0 44-40 50 q-74 8 -148 0 q-40-6 -40-50z" fill="hsl(95 58% 80%)" opacity="0.9"/>
+      <path d="M296 330 h208 v230 q0 34-34 40 q-70 8 -140 0 q-34-6 -34-40z" fill="hsl(95 52% 46%)" opacity="0.75"/>
+      <path d="M306 296 h34 v290 q-20-4 -34-10z" fill="#ffffff" opacity="0.5"/>
+      <rect x="306" y="368" width="188" height="146" rx="10" fill="#ffffff" opacity="0.94"/>
+      <circle cx="400" cy="416" r="26" fill="hsl(95 48% 30%)"/>
+      <g fill="hsl(95 52% 46%)">
+        <ellipse cx="438.0" cy="416.0" rx="13" ry="7" transform="rotate(0 438.0 416.0)"/><ellipse cx="430.7" cy="438.3" rx="13" ry="7" transform="rotate(36 430.7 438.3)"/><ellipse cx="411.7" cy="452.1" rx="13" ry="7" transform="rotate(72 411.7 452.1)"/><ellipse cx="388.3" cy="452.1" rx="13" ry="7" transform="rotate(108 388.3 452.1)"/><ellipse cx="369.3" cy="438.3" rx="13" ry="7" transform="rotate(144 369.3 438.3)"/><ellipse cx="362.0" cy="416.0" rx="13" ry="7" transform="rotate(180 362.0 416.0)"/><ellipse cx="369.3" cy="393.7" rx="13" ry="7" transform="rotate(216 369.3 393.7)"/><ellipse cx="388.3" cy="379.9" rx="13" ry="7" transform="rotate(252 388.3 379.9)"/><ellipse cx="411.7" cy="379.9" rx="13" ry="7" transform="rotate(288 411.7 379.9)"/><ellipse cx="430.7" cy="393.7" rx="13" ry="7" transform="rotate(324 430.7 393.7)"/>
+      </g>
+      <text x="400" y="492" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="28" font-weight="700" fill="#464c51">5 LITA</text>
+      <path d="M514 316 q56 10 56 60 t-56 60" fill="none" stroke="hsl(95 58% 80%)" stroke-width="26" stroke-linecap="round" opacity="0.9"/>
+    </g>
+  </g>
+</svg>

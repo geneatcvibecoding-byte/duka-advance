@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(95 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(129 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="">
+
+      <path d="M296 268 q104-38 208 0 l-14 34 q-90-28 -180 0z" fill="hsl(95 48% 30%)"/>
+      <path d="M282 302 q118-34 236 0 v246 q0 62-52 70 q-66 8 -132 0 q-52-8 -52-70z" fill="hsl(95 58% 80%)"/>
+      <path d="M304 322 q40-10 56-12 v290 q-34-4 -56-10z" fill="#ffffff" opacity="0.42"/>
+      <rect x="308" y="376" width="184" height="152" rx="10" fill="#ffffff" opacity="0.9"/>
+      <text x="400" y="424" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="30" font-weight="700" fill="hsl(95 48% 30%)">KILOMBERO</text>
+      <g fill="hsl(95 52% 46%)">
+        <ellipse cx="366" cy="458" rx="9" ry="17" transform="rotate(-22 366 458)"/>
+        <ellipse cx="400" cy="452" rx="9" ry="17"/>
+        <ellipse cx="434" cy="458" rx="9" ry="17" transform="rotate(22 434 458)"/>
+      </g>
+      <text x="400" y="510" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="26" font-weight="700" fill="#464c51">25 kg</text>
+      <path d="M296 268 q104-38 208 0" fill="none" stroke="#2f3336" stroke-opacity="0.2" stroke-width="6"/>
+    </g>
+  </g>
+</svg>

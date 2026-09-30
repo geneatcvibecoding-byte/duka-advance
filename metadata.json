@@ -1,0 +1,7 @@
+{
+  "name": "Duka - Campus Marketplace",
+  "description": "Student marketplace and e-commerce platform with escrow protection.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

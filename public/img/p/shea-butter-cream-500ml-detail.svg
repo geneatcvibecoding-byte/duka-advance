@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(160 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(194 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <ellipse cx="400" cy="286" rx="136" ry="30" fill="hsl(160 58% 80%)"/>
+      <path d="M264 286 h272 v70 q-136 26 -272 0z" fill="hsl(160 52% 46%)"/>
+      <path d="M272 356 h256 v206 q0 40-40 46 q-88 10 -176 0 q-40-6 -40-46z" fill="#ffffff"/>
+      <path d="M272 356 h256 v206 q0 40-40 46 q-88 10 -176 0 q-40-6 -40-46z" fill="hsl(160 58% 80%)" opacity="0.35"/>
+      <path d="M292 372 h40 v212 q-22-4 -40-10z" fill="#ffffff" opacity="0.7"/>
+      <rect x="300" y="424" width="200" height="106" rx="8" fill="hsl(160 48% 30%)" opacity="0.9"/>
+      <text x="400" y="470" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="30" font-weight="700" fill="#ffffff">SHEA</text>
+      <text x="400" y="506" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="22" fill="#ffffff" opacity="0.85">500 ml</text>
+      <ellipse cx="400" cy="286" rx="96" ry="20" fill="hsl(160 48% 30%)" opacity="0.25"/>
+    </g>
+  </g>
+</svg>

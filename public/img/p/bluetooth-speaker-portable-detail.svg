@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(215 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(249 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <rect x="252" y="298" width="296" height="252" rx="60" fill="#2f3336"/>
+      <rect x="270" y="316" width="260" height="216" rx="46" fill="#464c51"/>
+      <g fill="#2f3336" opacity="0.85">
+        <circle cx="300" cy="346" r="7"/><circle cx="333" cy="346" r="7"/><circle cx="366" cy="346" r="7"/><circle cx="399" cy="346" r="7"/><circle cx="432" cy="346" r="7"/><circle cx="465" cy="346" r="7"/><circle cx="498" cy="346" r="7"/><circle cx="300" cy="377" r="7"/><circle cx="333" cy="377" r="7"/><circle cx="366" cy="377" r="7"/><circle cx="399" cy="377" r="7"/><circle cx="432" cy="377" r="7"/><circle cx="465" cy="377" r="7"/><circle cx="498" cy="377" r="7"/><circle cx="300" cy="408" r="7"/><circle cx="333" cy="408" r="7"/><circle cx="366" cy="408" r="7"/><circle cx="399" cy="408" r="7"/><circle cx="432" cy="408" r="7"/><circle cx="465" cy="408" r="7"/><circle cx="498" cy="408" r="7"/><circle cx="300" cy="439" r="7"/><circle cx="333" cy="439" r="7"/><circle cx="366" cy="439" r="7"/><circle cx="399" cy="439" r="7"/><circle cx="432" cy="439" r="7"/><circle cx="465" cy="439" r="7"/><circle cx="498" cy="439" r="7"/><circle cx="300" cy="470" r="7"/><circle cx="333" cy="470" r="7"/><circle cx="366" cy="470" r="7"/><circle cx="399" cy="470" r="7"/><circle cx="432" cy="470" r="7"/><circle cx="465" cy="470" r="7"/><circle cx="498" cy="470" r="7"/><circle cx="300" cy="501" r="7"/><circle cx="333" cy="501" r="7"/><circle cx="366" cy="501" r="7"/><circle cx="399" cy="501" r="7"/><circle cx="432" cy="501" r="7"/><circle cx="465" cy="501" r="7"/><circle cx="498" cy="501" r="7"/>
+      </g>
+      <rect x="252" y="298" width="296" height="16" rx="8" fill="hsl(215 52% 46%)"/>
+      <circle cx="316" cy="576" r="15" fill="#464c51"/>
+      <circle cx="484" cy="576" r="15" fill="#464c51"/>
+      <rect x="352" y="562" width="96" height="28" rx="14" fill="#464c51"/>
+      <circle cx="376" cy="576" r="7" fill="hsl(215 52% 46%)"/>
+      <circle cx="400" cy="576" r="7" fill="#9aa2a9"/>
+      <circle cx="424" cy="576" r="7" fill="#9aa2a9"/>
+    </g>
+  </g>
+</svg>

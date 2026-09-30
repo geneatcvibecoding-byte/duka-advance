@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(25 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(59 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="translate(400 400) scale(1.42) translate(-400 -400)">
+
+      <ellipse cx="400" cy="232" rx="118" ry="26" fill="#c3c9ce"/>
+      <path d="M282 232 h236 v34 q-118 22 -236 0z" fill="#9aa2a9"/>
+      <path d="M292 266 h216 v130 q-108 20 -216 0z" fill="#e9ecee" opacity="0.94"/>
+      <path d="M292 266 h216 v130 q-108 20 -216 0z" fill="hsl(25 58% 80%)" opacity="0.45"/>
+      <rect x="284" y="396" width="232" height="20" rx="6" fill="#464c51"/>
+      <path d="M292 416 h216 v168 q0 30-34 34 q-74 8 -148 0 q-34-4 -34-34z" fill="#ffffff" opacity="0.9"/>
+      <path d="M300 470 h200 v110 q0 22-28 26 q-72 8 -144 0 q-28-4 -28-26z" fill="hsl(25 52% 46%)" opacity="0.55"/>
+      <rect x="356" y="288" width="30" height="96" rx="15" fill="#ffffff"/>
+      <rect x="414" y="288" width="30" height="96" rx="15" fill="#ffffff"/>
+      <g fill="#464c51">
+        <rect x="474" y="512" width="62" height="20" rx="7"/>
+        <rect x="514" y="512" width="22" height="54" rx="7"/>
+      </g>
+      <path d="M252 618 h296 v22 H252z" fill="#464c51"/>
+    </g>
+  </g>
+</svg>

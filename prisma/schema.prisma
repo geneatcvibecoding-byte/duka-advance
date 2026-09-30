@@ -1,0 +1,673 @@
+// Duka — Tanzanian e-commerce, phase 1
+//
+// Postgres (Supabase). The app connects through Supabase's transaction pooler
+// via DATABASE_URL; the CLI runs migrations over the direct connection via
+// DIRECT_URL, because pgbouncer cannot run the DDL that migrations need.
+//
+// Money is stored as whole Tanzanian shillings (Int). TZS has no subunit in
+// practice, so there are no cents to track and no floating point rounding.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// People
+// ---------------------------------------------------------------------------
+
+/// role: CUSTOMER | ADMIN
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  /// Normalised to +255XXXXXXXXX. This is the login identifier.
+  phone        String   @unique
+  email        String?  @unique
+  passwordHash String
+  role         String   @default("CUSTOMER")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  addresses Address[]
+  orders    Order[]
+  reviews   Review[]
+  wishlist   WishlistItem[]
+
+  university          University?              @relation(fields: [universityId], references: [id])
+  universityId        String?
+  institution         Institution?             @relation(fields: [institutionId], references: [id])
+  institutionId       String?
+  supabaseUid         String?                  @unique
+  store               Store?
+  /// Set when the student proved control of a mailbox on their university's
+  /// email domain. This proves a *mailbox*, not enrolment: staff and alumni
+  /// keep university addresses for life, so it is a trust signal, not proof.
+  studentVerifiedAt   DateTime?
+  /// Student number, as printed on the ID card. Asserted by the user; we never
+  /// have a way to check it, so nothing may depend on it being accurate.
+  studentNumber       String?
+  /// Where a marketplace payout is sent. Seller-supplied; an admin reads this
+  /// when releasing escrow, so a payout never has to be chased by phone.
+  payoutMethod        String?
+  payoutNumber        String?
+  payoutName          String?
+  verificationCodes   StudentVerificationCode[]
+  listings            Listing[]
+  soldOrders          Order[]                  @relation("OrderSeller")
+  reputation          SellerRating[]
+  ratingsGiven        SellerRating[]           @relation("RatingGiver")
+  savedListings       SavedListing[]
+  following           SellerFollow[]           @relation("Follower")
+  followers           SellerFollow[]           @relation("FollowedSeller")
+  offers              Offer[]
+  messages            OrderMessage[]
+  notifications       Notification[]
+}
+
+/// A campus. Students verify against its email domain, e.g. "udsm.ac.tz".
+model University {
+  id       String @id @default(cuid())
+  slug     String @unique
+  nameEn   String
+  nameSw   String
+  /// Lowercase, no "@". Unique: two campuses may not share a mail domain, or
+  /// verifying one would verify the other.
+  emailDomain String @unique
+  region   String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  users    User[]
+  listings Listing[]
+}
+
+/// A higher-education institution (e.g. Arusha Technical College, UDSM).
+/// The root of multi-tenant campus marketplaces.
+model Institution {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  shortName String   // e.g. "ATC"
+  domain    String   @unique // e.g. "atc.ac.tz"
+  logo      String?
+  city      String   @default("Arusha")
+  status    String   @default("ACTIVE") // ACTIVE | INACTIVE
+  createdAt DateTime @default(now())
+
+  campuses Campus[]
+  users    User[]
+  stores   Store[]
+}
+
+/// A specific campus under an institution (e.g. ATC Main Campus).
+model Campus {
+  id            String      @id @default(cuid())
+  institutionId String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name          String      // e.g. "Main Campus"
+  code          String      // e.g. "ATC-MAIN"
+  createdAt     DateTime    @default(now())
+
+  safeTradeZones SafeTradeZone[]
+  listings       Listing[]
+
+  @@index([institutionId])
+}
+
+/// An official, secure public meetup location for physical campus handovers.
+model SafeTradeZone {
+  id             String   @id @default(cuid())
+  campusId       String
+  campus         Campus   @relation(fields: [campusId], references: [id], onDelete: Cascade)
+  name           String   // e.g. "Library Main Entrance"
+  description    String?  // e.g. "Well-lit lobby with campus security post"
+  suggestedHours String?  // e.g. "08:00 - 18:00"
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  orders Order[]
+
+  @@index([campusId])
+}
+
+/// A student-entrepreneur's personalized storefront (Shopify-style).
+model Store {
+  id            String       @id @default(cuid())
+  userId        String       @unique
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institutionId String?
+  institution   Institution? @relation(fields: [institutionId], references: [id])
+  slug          String       @unique
+  name          String
+  bio           String?
+  logo          String?
+  banner        String?
+  themeColor    String       @default("#0D9488")
+  themeLayout   String       @default("MODERN") // MODERN | MINIMAL | TECH
+  status        String       @default("ACTIVE") // ACTIVE | VACATION | SUSPENDED
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  listings Listing[]
+  orders   Order[]
+
+  @@index([institutionId])
+  @@index([status])
+}
+
+/// Single-use, expiring 4-6 digit Handover PIN exchanged at physical meetup.
+model HandoverPin {
+  id         String    @id @default(cuid())
+  orderId    String    @unique
+  order      Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  pinHash    String    // bcrypt hash of the 4-digit code
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([expiresAt])
+}
+
+/// Single-use, expiring code proving control of a university mailbox.
+/// The code is stored only as a bcrypt hash, so a database leak does not hand
+/// over every pending verification.
+model StudentVerificationCode {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email      String
+  codeHash   String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, consumedAt])
+  @@index([expiresAt])
+}
+
+/// Seller-to-seller rating. Only completed escrow orders can be rated, so a
+/// rating can never be left on an order that was cancelled or refunded.
+model SellerRating {
+  id        String   @id @default(cuid())
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  sellerId  String
+  seller    User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  raterId   String
+  rater     User     @relation("RatingGiver", fields: [raterId], references: [id], onDelete: Cascade)
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@index([sellerId])
+}
+
+/// A buyer bookmarking a listing to find it again.
+model SavedListing {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@index([userId])
+}
+
+/// A student following a seller to catch their new listings.
+model SellerFollow {
+  id         String   @id @default(cuid())
+  followerId String
+  follower   User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  sellerId   String
+  seller     User     @relation("FollowedSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([followerId, sellerId])
+  @@index([sellerId])
+}
+
+/// A price a buyer proposes for a listing. The seller decides.
+model Offer {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  amount    Int
+  message   String?
+  /// PENDING | ACCEPTED | DECLINED | WITHDRAWN
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([listingId, status])
+  @@index([buyerId])
+}
+
+/// Back-and-forth between buyer and seller to arrange the campus handover.
+model OrderMessage {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+/// In-app notification. Email delivery is a console stub for now, like the
+/// verification code.
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// e.g. ESCROW_FUNDED | OFFER_RECEIVED | OFFER_ACCEPTED | ORDER_MESSAGE
+  type      String
+  /// Optional deep link, usually an order page.
+  href      String?
+  /// Money named in the message, in whole shillings. The notification text is
+  /// translated, so the number cannot be baked into it at write time - an offer
+  /// notification that reads "you received an offer of -" is worse than none.
+  amount    Int?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead, createdAt])
+}
+
+/// One row per sign-in attempt, used to throttle brute-force guessing.
+/// Kept in the database rather than in memory because serverless functions do
+/// not share memory — an in-process counter is bypassed by simply retrying
+/// until the request lands on a cold instance.
+model LoginAttempt {
+  id         String   @id @default(cuid())
+  /// Normalised phone the attempt was made against.
+  identifier String
+  ip         String
+  success    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([identifier, createdAt])
+  @@index([ip, createdAt])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName  String
+  phone     String
+  region    String
+  district  String
+  street    String
+  landmark  String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Catalogue
+// ---------------------------------------------------------------------------
+
+model Category {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  nameEn    String
+  nameSw    String
+  descEn    String?
+  descSw    String?
+  image     String?
+  position  Int      @default(0)
+  isActive  Boolean  @default(true)
+  parentId  String?
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  products  Product[]
+  listings  Listing[]
+  createdAt DateTime @default(now())
+
+  @@index([parentId])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  nameEn      String
+  nameSw      String
+  descEn      String
+  descSw      String
+  brand       String?
+  sku         String?  @unique
+  /// Whole Tanzanian shillings.
+  price       Int
+  /// Was-price, shown struck through when higher than `price`.
+  compareAt   Int?
+  stock       Int      @default(0)
+  lowStockAt  Int      @default(5)
+  weightGrams Int?
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  images     ProductImage[]
+  variants   ProductVariant[]
+  reviews    Review[]
+  orderItems OrderItem[]
+  wishlist   WishlistItem[]
+
+  @@index([categoryId])
+  @@index([isActive, isFeatured])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  position  Int     @default(0)
+
+  @@index([productId])
+}
+
+/// A single selectable option, e.g. optionEn "Size" / value "42".
+model ProductVariant {
+  id         String  @id @default(cuid())
+  productId  String
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  optionEn   String
+  optionSw   String
+  value      String
+  /// Added to (or subtracted from) the product price when this variant is chosen.
+  priceDelta Int     @default(0)
+  stock      Int     @default(0)
+  sku        String?
+  position   Int     @default(0)
+
+  @@index([productId])
+}
+
+/// An item offered by a verified student.
+///
+/// Separate from `Product` on purpose. A `Product` is stock the shop owns and
+/// ships; a `Listing` is one student's item, sold once, to one buyer, on one
+/// campus. Keeping them apart means the existing catalogue, cart, and admin
+/// product tooling keeps working untouched.
+model Listing {
+  id         String @id @default(cuid())
+  slug       String @unique
+  titleEn    String
+  titleSw    String
+  descEn     String
+  descSw     String
+  /// Whole Tanzanian shillings, like `Product.price`.
+  price      Int
+  /// NEW | LIKE_NEW | GOOD | FAIR — students buy used textbooks, so a
+  /// condition field is the main thing buyers filter on.
+  condition  String @default("GOOD")
+  /// DRAFT | ACTIVE | PAUSED | SOLD | REMOVED
+  status     String @default("ACTIVE")
+  isFeatured Boolean @default(false)
+  /// Featured promotion expiry. Null means never promoted; a past date means the
+  /// promotion has lapsed but the listing itself is unaffected.
+  featuredUntil DateTime?
+  /// Times the listing detail page was opened. A cheap popularity signal.
+  viewCount  Int @default(0)
+
+  sellerId     String
+  seller       User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  campusId     String?
+  campus       Campus?    @relation(fields: [campusId], references: [id])
+  storeId      String?
+  store        Store?     @relation(fields: [storeId], references: [id])
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images     ListingImage[]
+  orderItems OrderItem[]
+  savedBy    SavedListing[]
+  offers     Offer[]
+
+  @@index([status, createdAt])
+  @@index([sellerId, status])
+  @@index([universityId, status])
+  @@index([categoryId, status])
+  @@index([campusId])
+  @@index([storeId])
+}
+
+model ListingImage {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  position  Int     @default(0)
+
+  @@index([listingId])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating     Int
+  comment    String
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@unique([productId, userId])
+  @@index([productId])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+// ---------------------------------------------------------------------------
+// Orders
+// ---------------------------------------------------------------------------
+
+/// status:        PENDING | CONFIRMED | PACKED | SHIPPED | DELIVERED | CANCELLED
+/// paymentStatus: UNPAID | AWAITING_CONFIRMATION | PAID | REFUNDED | FAILED
+/// paymentMethod: see src/lib/payments/providers.ts
+model Order {
+  id            String    @id @default(cuid())
+  orderNumber   String    @unique
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id])
+  /// Null for the shop's own stock. Set for a student-to-student order, and
+  /// there is exactly one seller per order — a cart spanning two sellers would
+  /// need escrow split across two payouts, which this schema deliberately
+  /// does not attempt yet. See docs/student-marketplace.md.
+  sellerId      String?
+  seller        User?     @relation("OrderSeller", fields: [sellerId], references: [id])
+  storeId       String?
+  store         Store?    @relation(fields: [storeId], references: [id])
+  safeTradeZoneId String?
+  safeTradeZone SafeTradeZone? @relation(fields: [safeTradeZoneId], references: [id])
+  status        String    @default("PENDING")
+  paymentMethod String
+  paymentStatus String    @default("UNPAID")
+  /// Customer-supplied M-Pesa / bank transaction reference, confirmed by an admin.
+  paymentRef    String?
+  paidAt        DateTime?
+
+  /// Escrow leg. Only meaningful when `sellerId` is set. The transitions are
+  /// owned by src/lib/escrow.ts — do not write these fields from anywhere else.
+  /// AWAITING_FUNDING | FUNDED | DELIVERED | RELEASED | REFUNDED | DISPUTED
+  escrowStatus  String    @default("AWAITING_FUNDING")
+  /// Buyer's mobile-money reference for the money held in escrow. Set when the
+  /// order moves to FUNDED.
+  escrowRef     String?
+  escrowFundedAt DateTime?
+  /// When the seller confirmed handing the item over. Starts the buyer's
+  /// confirmation window, and the clock the auto-release cron reads.
+  deliveredAt   DateTime?
+  /// Seller's mobile-money reference for the payout. Set on release.
+  payoutRef     String?
+  releasedAt    DateTime?
+  refundedAt    DateTime?
+  /// Why escrow is frozen, and what the admin decided to unblock it.
+  disputeReason String?
+  resolvedBy    String?
+  resolvedAt    DateTime?
+
+  /// Platform commission in whole shillings, taken from the total. Computed at
+  /// order time from ShopSettings.marketplaceFeePercent and stored, so a later
+  /// rate change never rewrites the accounting of an old order.
+  platformFee   Int       @default(0)
+
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  region        String
+  district      String
+  street        String
+  landmark      String?
+  notes         String?
+
+  subtotal    Int
+  discount    Int     @default(0)
+  deliveryFee Int     @default(0)
+  total       Int
+  couponCode  String?
+
+  items       OrderItem[]
+  events      OrderEvent[]
+  messages    OrderMessage[]
+  rating      SellerRating?
+  handoverPin HandoverPin?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([storeId])
+  @@index([safeTradeZoneId])
+}
+
+/// Line items copy the product name and price at time of sale, so later
+/// catalogue edits never rewrite historic orders.
+model OrderItem {
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id])
+  /// Set instead of `productId` for a student listing. Exactly one of the two
+  /// is set on any order item.
+  listingId    String?
+  listing      Listing? @relation(fields: [listingId], references: [id])
+  nameEn       String
+  nameSw       String
+  variantLabel String?
+  imageUrl     String?
+  unitPrice    Int
+  quantity     Int
+  lineTotal    Int
+
+  @@index([orderId])
+}
+
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  note      String?
+  actor     String?
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// ---------------------------------------------------------------------------
+// Shop configuration
+// ---------------------------------------------------------------------------
+
+/// type: PERCENT | FIXED
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  type        String
+  value       Int
+  minSubtotal Int       @default(0)
+  maxUses     Int?
+  usedCount   Int       @default(0)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model DeliveryZone {
+  id         String  @id @default(cuid())
+  region     String  @unique
+  fee        Int
+  etaMinDays Int     @default(1)
+  etaMaxDays Int     @default(3)
+  isActive   Boolean @default(true)
+  position   Int     @default(0)
+}
+
+/// Single row, always id = "shop".
+model ShopSettings {
+  id       String @id @default("shop")
+  nameEn   String
+  nameSw   String
+  taglineEn String
+  taglineSw String
+  phone    String
+  whatsapp String
+  email    String
+  addressLine String
+
+  /// Displayed on the manual-transfer checkout screen.
+  mpesaName         String?
+  mpesaLipaNamba    String?
+  tigoPesaNumber    String?
+  airtelMoneyNumber String?
+  halopesaNumber    String?
+  bankName          String?
+  bankAccountName   String?
+  bankAccountNumber String?
+
+  /// Subtotal at or above which delivery is free. Null disables the rule.
+  freeDeliveryOver Int?
+  /// Marketplace commission on a student-to-student sale, in percent. One
+  /// configurable field rather than the "5-8%" the original canvas guessed at,
+  /// so the rate can be measured against real sales instead of assumed.
+  marketplaceFeePercent Int @default(6)
+  updatedAt        DateTime @updatedAt
+}

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(340 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(14 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="">
+
+      <defs>
+        <pattern id="shuka" width="64" height="64" patternUnits="userSpaceOnUse">
+          <rect width="64" height="64" fill="#b3241f"/>
+          <rect x="0" y="0" width="64" height="10" fill="#1d1d1d"/>
+          <rect x="0" y="0" width="10" height="64" fill="#1d1d1d"/>
+          <rect x="32" y="0" width="4" height="64" fill="#1d1d1d" opacity="0.6"/>
+          <rect x="0" y="32" width="64" height="4" fill="#1d1d1d" opacity="0.6"/>
+        </pattern>
+      </defs>
+      <g>
+        <path d="M212 468 h376 v58 q-188 34 -376 0z" fill="url(#shuka)"/>
+        <path d="M212 468 h376 v14 H212z" fill="#2f3336" opacity="0.28"/>
+        <path d="M222 384 h356 v58 q-178 32 -356 0z" fill="url(#shuka)"/>
+        <path d="M222 384 h356 v14 H222z" fill="#2f3336" opacity="0.28"/>
+        <path d="M236 300 h328 v58 q-164 30 -328 0z" fill="url(#shuka)"/>
+        <path d="M236 300 h328 v14 H236z" fill="#2f3336" opacity="0.28"/>
+        <path d="M212 526 q188 34 376 0 v56 q-188 34 -376 0z" fill="url(#shuka)"/>
+        <path d="M212 582 q188 34 376 0 v22 q-188 34 -376 0z" fill="#2f3336" opacity="0.18"/>
+      </g>
+    </g>
+  </g>
+</svg>

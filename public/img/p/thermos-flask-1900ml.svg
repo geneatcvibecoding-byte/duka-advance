@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="hsl(25 55% 93%)"/>
+      <stop offset="100%" stop-color="hsl(59 45% 84%)"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#2b2f33" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#2b2f33" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="800" height="800"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="800" height="800" fill="url(#bg)"/>
+    <rect width="800" height="800" fill="url(#glow)"/>
+    <ellipse cx="400" cy="646" rx="205" ry="34" fill="url(#shade)"/>
+    <g transform="">
+
+      <rect x="326" y="196" width="148" height="52" rx="16" fill="hsl(25 48% 30%)"/>
+      <rect x="338" y="248" width="124" height="34" rx="10" fill="#9aa2a9"/>
+      <path d="M310 282 h180 v300 q0 46-42 52 q-48 6 -96 0 q-42-6 -42-52z" fill="#c3c9ce"/>
+      <path d="M330 282 h44 v340 q-24-2 -44-8z" fill="#ffffff" opacity="0.55"/>
+      <path d="M310 356 h180 v96 H310z" fill="hsl(25 52% 46%)"/>
+      <text x="400" y="418" text-anchor="middle" font-family="'Segoe UI',Arial,sans-serif" font-size="34" font-weight="700" fill="#ffffff">1.9L</text>
+      <path d="M490 322 q86 6 86 78 t-86 78" fill="none" stroke="#464c51" stroke-width="26" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
