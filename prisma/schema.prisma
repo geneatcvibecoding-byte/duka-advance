@@ -67,6 +67,7 @@ model User {
   offers              Offer[]
   messages            OrderMessage[]
   notifications       Notification[]
+  productsOwned       Product[]                @relation("ProductSeller")
 }
 
 /// A campus. Students verify against its email domain, e.g. "udsm.ac.tz".
@@ -359,6 +360,9 @@ model Product {
   weightGrams Int?
   isActive    Boolean  @default(true)
   isFeatured  Boolean  @default(false)
+  /// Optional future owner. Null keeps Phase 1 products owned by the platform.
+  sellerId    String?
+  seller      User?    @relation("ProductSeller", fields: [sellerId], references: [id], onDelete: SetNull)
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
@@ -372,6 +376,7 @@ model Product {
 
   @@index([categoryId])
   @@index([isActive, isFeatured])
+  @@index([sellerId, isActive])
 }
 
 model ProductImage {
