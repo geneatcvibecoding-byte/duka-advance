@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Bell, GraduationCap, Phone, Search, ShoppingCart, User } from "lucide-react";
-import { getCartCount } from "@/lib/cart";
+import { Bell, GraduationCap, Phone, Search, User } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { getUnreadNotificationCount } from "@/lib/marketplace";
 import { getNavCategories, getShopSettings } from "@/lib/settings";
@@ -11,10 +10,9 @@ import { MobileMenu } from "./MobileMenu";
 
 export async function Header({ locale }: { locale: Locale }) {
   const t = getTranslator(locale);
-  const [settings, categories, cartCount, user] = await Promise.all([
+  const [settings, categories, user] = await Promise.all([
     getShopSettings(),
     getNavCategories(),
-    getCartCount(),
     getCurrentUser(),
   ]);
 
@@ -168,18 +166,6 @@ export async function Header({ locale }: { locale: Locale }) {
               </span>
             </Link>
 
-            <Link
-              href={link(locale, "/cart")}
-              className="relative inline-flex h-9 items-center gap-2 rounded-lg border border-ink-200/70 bg-white px-3 text-xs font-medium text-ink-800 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors hover:bg-ink-50 hover:text-ink-900"
-            >
-              <ShoppingCart size={16} aria-hidden />
-              <span className="hidden sm:inline">{t("nav.cart")}</span>
-              {cartCount > 0 ? (
-                <span className="grid h-4 min-w-4 place-items-center rounded-full bg-ink-900 px-1 text-[10px] font-bold text-white">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              ) : null}
-            </Link>
           </div>
         </div>
       </div>
