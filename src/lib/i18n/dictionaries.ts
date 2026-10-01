@@ -104,7 +104,11 @@ const en = {
   "product.addToWishlist": "Save for later",
   "product.removeFromWishlist": "Remove from wishlist",
   "product.shareWhatsapp": "Share on WhatsApp",
-  "product.askAboutProduct": "Ask about this product",
+  "product.askAboutProduct": "Uliza kuhusu bidhaa hii",
+  "product.orderViaWhatsapp": "Agiza kupitia WhatsApp",
+  "product.whatsappOrderHint": "Wasiliana na muuzaji kuthibitisha upatikanaji, makabidhiano chuoni na malipo.",
+  "product.orderViaWhatsapp": "Order via WhatsApp",
+  "product.whatsappOrderHint": "Chat with the seller to confirm availability, campus handoff, and payment.",
 
   // -- cart -----------------------------------------------------------------
   "cart.title": "Your cart",
