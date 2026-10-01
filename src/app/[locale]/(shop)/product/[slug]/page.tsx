@@ -8,7 +8,7 @@ import { getShopSettings } from "@/lib/settings";
 import { formatDate, getTranslator, link, pick, resolveLocale } from "@/lib/i18n";
 import { formatTZS, whatsappNumber } from "@/lib/tz";
 import { discountPercent } from "@/lib/utils";
-import { AddToCartForm, type VariantOption } from "@/components/AddToCartForm";
+
 import { ReviewForm } from "@/components/ReviewForm";
 import { ProductCard, ProductGrid } from "@/components/ProductCard";
 import { Badge, SectionHeading } from "@/components/ui";
@@ -122,7 +122,7 @@ export default async function ProductPage({ params }: Props) {
       : product.stock;
   const outOfStock = totalStock <= 0;
 
-  const variantOptions: VariantOption[] = product.variants.map((v) => ({
+  const variantOptions = product.variants.map((v) => ({
     id: v.id,
     label: pick(locale, v.optionEn, v.optionSw),
     value: v.value,
@@ -135,8 +135,11 @@ export default async function ProductPage({ params }: Props) {
       ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
       : 0;
 
+  const productUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}${link(locale, `/product/${product.slug}`)}`;
   const whatsappText = encodeURIComponent(
-    `Habari, ${name} (${formatTZS(product.price)}) — ${process.env.NEXT_PUBLIC_SITE_URL ?? ""}${link(locale, `/product/${product.slug}`)}`,
+    locale === "sw"
+      ? `Habari, ningependa kuagiza: ${name} — ${formatTZS(product.price)}. Kiungo: ${productUrl}`
+      : `Hello, I'd like to order: ${name} — ${formatTZS(product.price)}. Link: ${productUrl}`,
   );
 
   // Structured data: this is what makes Google show the price, stock status and
@@ -282,19 +285,24 @@ export default async function ProductPage({ params }: Props) {
           </p>
 
           <div className="mt-6 border-y border-ink-200 py-6">
-            <AddToCartForm
-              productId={product.id}
-              variants={variantOptions}
-              optionLabel={variantOptions[0]?.label ?? null}
-              outOfStock={outOfStock}
-              labels={{
-                addToCart: t("product.addToCart"),
-                added: t("product.added"),
-                quantity: t("product.quantity"),
-                outOfStock: t("product.outOfStock"),
-                chooseOption: t("product.quantity"),
-              }}
-            />
+            {outOfStock ? (
+              <div className="rounded-xl bg-ink-100 px-4 py-3 text-center text-sm font-semibold text-ink-600">
+                {t("product.outOfStock")}
+              </div>
+            ) : (
+              <a
+                href={`https://wa.me/${whatsappNumber(settings.whatsapp)}?text=${whatsappText}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[#25D366]/40 focus:ring-offset-2"
+              >
+                <MessageCircle size={19} aria-hidden />
+                {t("product.orderViaWhatsapp")}
+              </a>
+            )}
+            <p className="mt-2 text-center text-xs text-ink-500">
+              {t("product.whatsappOrderHint")}
+            </p>
           </div>
 
           <div className="mt-5 flex flex-wrap gap-4 text-sm">
