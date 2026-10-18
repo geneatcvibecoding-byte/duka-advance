@@ -87,7 +87,7 @@ async function main() {
         taglineEn: "Genuine products, delivered across Tanzania",
         taglineSw: "Bidhaa halisi, zinafikishwa Tanzania nzima",
         phone: adminPhone,
-        whatsapp: normalizePhone(process.env.SHOP_WHATSAPP ?? adminPhone),
+        whatsapp: normalizePhone(process.env.SHOP_WHATSAPP?.trim() || adminPhone),
         email: process.env.SHOP_EMAIL ?? "",
         addressLine: "",
         freeDeliveryOver: null,
