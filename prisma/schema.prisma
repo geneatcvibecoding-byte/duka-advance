@@ -671,3 +671,10 @@ model ShopSettings {
   marketplaceFeePercent Int @default(6)
   updatedAt        DateTime @updatedAt
 }
+
+/// Persistent visual storefront customizer content (single global document).
+model SiteContent {
+  id        String   @id
+  data      String   @db.Text
+  updatedAt DateTime @updatedAt
+}
