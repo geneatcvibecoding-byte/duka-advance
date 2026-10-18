@@ -173,8 +173,8 @@ export function ProductForm({
               <Input
                 id="imageUrl"
                 name="imageUrl"
-                type="url"
-                placeholder="https://example.com/product-photo.jpg"
+                type="text"
+                placeholder="https://example.com/product-photo.jpg or /img/p/example.svg"
                 value={imageUrl}
                 onChange={(event) => setImageUrl(event.target.value)}
               />
