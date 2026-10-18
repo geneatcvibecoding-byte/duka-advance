@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Loader2 } from "lucide-react";
 import { saveProductAction, type AdminState } from "@/app/actions/admin";
@@ -49,6 +49,7 @@ export function ProductForm({
     null,
   );
   const isEdit = Boolean(values.id);
+  const [imageUrl, setImageUrl] = useState("");
 
   return (
     <form action={formAction} className="space-y-6">
@@ -66,11 +67,19 @@ export function ProductForm({
           <Field label="Name (Kiswahili)" htmlFor="nameSw" required>
             <Input id="nameSw" name="nameSw" defaultValue={values.nameSw} required />
           </Field>
-          <Field label="Description (English)" htmlFor="descEn">
-            <Textarea id="descEn" name="descEn" rows={5} defaultValue={values.descEn} />
+          <Field
+            label="Description (English)"
+            htmlFor="descEn"
+            hint="Explain what the product is, what is included, and why a customer would want it."
+          >
+            <Textarea id="descEn" name="descEn" rows={5} placeholder="Describe the product clearly for customers…" defaultValue={values.descEn} />
           </Field>
-          <Field label="Description (Kiswahili)" htmlFor="descSw">
-            <Textarea id="descSw" name="descSw" rows={5} defaultValue={values.descSw} />
+          <Field
+            label="Description (Kiswahili)"
+            htmlFor="descSw"
+            hint="Andika maelezo ya bidhaa kwa Kiswahili rahisi na kinachoeleweka."
+          >
+            <Textarea id="descSw" name="descSw" rows={5} placeholder="Eleza bidhaa kwa Kiswahili…" defaultValue={values.descSw} />
           </Field>
         </div>
       </section>
@@ -157,12 +166,36 @@ export function ProductForm({
         {!isEdit ? (
           <div className="mt-4">
             <Field
-              label="Image URL"
+              label="Main product image"
               htmlFor="imageUrl"
-              hint="You can add more images after saving"
+              hint="Paste an image URL. After creating the product, you can upload photos directly from your computer in the Images section."
             >
-              <Input id="imageUrl" name="imageUrl" placeholder="/img/p/example.svg" />
+              <Input
+                id="imageUrl"
+                name="imageUrl"
+                type="url"
+                placeholder="https://example.com/product-photo.jpg"
+                value={imageUrl}
+                onChange={(event) => setImageUrl(event.target.value)}
+              />
             </Field>
+            {imageUrl.trim() ? (
+              <div className="mt-3 max-w-xs rounded-xl border border-ink-200 bg-ink-50 p-3">
+                <p className="mb-2 text-xs font-semibold text-ink-600">Image preview</p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imageUrl}
+                  alt="Product image preview"
+                  className="aspect-square w-full rounded-lg bg-white object-contain"
+                  onError={(event) => { event.currentTarget.style.display = "none"; }}
+                  onLoad={(event) => { event.currentTarget.style.display = "block"; }}
+                />
+              </div>
+            ) : (
+              <p className="mt-2 text-xs text-ink-500">
+                Add a clear, well-lit photo so customers can see what they are buying.
+              </p>
+            )}
           </div>
         ) : null}
 
