@@ -179,7 +179,7 @@ export async function placeOrderAction(
   // WhatsApp number with a ready-to-send summary. No payment API is required.
   if (paymentMethod === "WHATSAPP") {
     const settings = await getShopSettings();
-    const whatsappNumber = settings.whatsapp.replace(/\\D/g, "");
+    const whatsappNumber = settings.whatsapp.replace(/\D/g, "");
     if (whatsappNumber.length >= 8) {
       const itemLines = cart.items.map((item) =>
         `- ${item.name}${item.variantLabel ? ` (${item.variantLabel})` : ""} × ${item.quantity}: TZS ${item.lineTotal.toLocaleString("en-US")}`,
@@ -204,7 +204,7 @@ export async function placeOrderAction(
         notes ? `Notes: ${notes}` : "",
         "",
         "Please confirm availability, final price, and delivery arrangements.",
-      ].filter(Boolean).join("\\n");
+      ].filter(Boolean).join("\n");
       redirect(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`);
     }
   }
