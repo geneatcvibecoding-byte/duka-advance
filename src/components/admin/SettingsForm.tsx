@@ -71,8 +71,21 @@ export function SettingsForm({ values }: { values: SettingsValues }) {
           <Field label="Phone" htmlFor="phone" hint="Shown in the header" required>
             <Input id="phone" name="phone" defaultValue={values.phone} required />
           </Field>
-          <Field label="WhatsApp" htmlFor="whatsapp" required>
-            <Input id="whatsapp" name="whatsapp" defaultValue={values.whatsapp} required />
+          <Field
+            label="WhatsApp"
+            htmlFor="whatsapp"
+            hint="Use international format, e.g. +255712345678, so checkout opens the right chat."
+            required
+          >
+            <Input
+              id="whatsapp"
+              name="whatsapp"
+              type="tel"
+              autoComplete="tel"
+              placeholder="+255712345678"
+              defaultValue={values.whatsapp}
+              required
+            />
           </Field>
           <Field label="Email" htmlFor="email">
             <Input id="email" name="email" type="email" defaultValue={values.email} />
