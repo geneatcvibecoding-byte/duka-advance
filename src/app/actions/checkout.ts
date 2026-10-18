@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getCartView, clearCart } from "@/lib/cart";
 import { getCurrentUser } from "@/lib/auth";
-import { calculateDelivery } from "@/lib/settings";
+import { calculateDelivery, getShopSettings } from "@/lib/settings";
 import { validateCoupon } from "@/lib/coupons";
 import { getProvider, isValidPaymentMethod } from "@/lib/payments/providers";
 import { getTranslator, link, resolveLocale } from "@/lib/i18n";
@@ -175,7 +175,41 @@ export async function placeOrderAction(
   await clearCart();
   revalidatePath("/", "layout");
 
-  // Online providers will redirect to the gateway here in phase 2.
+  // WhatsApp orders are saved first, then handed off to the shop's configured
+  // WhatsApp number with a ready-to-send summary. No payment API is required.
+  if (paymentMethod === "WHATSAPP") {
+    const settings = await getShopSettings();
+    const whatsappNumber = settings.whatsapp.replace(/\\D/g, "");
+    if (whatsappNumber.length >= 8) {
+      const itemLines = cart.items.map((item) =>
+        `- ${item.name}${item.variantLabel ? ` (${item.variantLabel})` : ""} × ${item.quantity}: TZS ${item.lineTotal.toLocaleString("en-US")}`,
+      );
+      const message = [
+        `Hello ${settings.nameEn}, I'd like to confirm this order.`,
+        "",
+        `Order: ${orderNumber}`,
+        `Customer: ${customerName}`,
+        `Phone: ${phone}`,
+        "",
+        "Items:",
+        ...itemLines,
+        "",
+        `Subtotal: TZS ${subtotal.toLocaleString("en-US")}`,
+        `Discount: TZS ${discount.toLocaleString("en-US")}`,
+        `Delivery: TZS ${delivery.fee.toLocaleString("en-US")}`,
+        `Total: TZS ${total.toLocaleString("en-US")}`,
+        "",
+        `Delivery address: ${district}, ${region}, ${street}`,
+        landmark ? `Landmark: ${landmark}` : "",
+        notes ? `Notes: ${notes}` : "",
+        "",
+        "Please confirm availability, final price, and delivery arrangements.",
+      ].filter(Boolean).join("\\n");
+      redirect(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`);
+    }
+  }
+
+  // Other methods continue to the normal order confirmation page.
   redirect(outcome.redirectUrl ?? link(locale, `/order/${orderNumber}`));
 }
 
